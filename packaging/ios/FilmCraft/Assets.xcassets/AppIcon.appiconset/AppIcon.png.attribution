@@ -1,0 +1,8 @@
+asset:        packaging/ios/FilmCraft/Assets.xcassets/AppIcon.appiconset/AppIcon.png
+title:        FilmCraft iPadOS app icon (owl with ear tufts), 1024 px, no alpha
+author:       Brandon Thomas (FilmCraft owner), for the FilmCraft project
+source:       original work: assets/app-icon/filmcraft.svg rendered at 1024 px without its rounded-corner clip and flattened onto the full-bleed app colour #8b5cf6
+license:      MIT OR Apache-2.0
+license-file: assets/app-icon/LICENSE.txt
+added:        2026-10-14 by Claude (agent) for the iPadOS fork
+notes:        iOS applies its own corner mask and rejects transparency, so the clip and alpha channel are removed. One image that Xcode scales to every iPad size.

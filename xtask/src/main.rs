@@ -16,9 +16,12 @@
 //!   lists, against a reference list (default: the local `plan/premiere/<area>.json`), presence and
 //!   placement reported separately (`parity.rs`, docs/gaps.md G7).
 //! - `ico <out.ico> <in.png>…`: pack PNGs into a Windows `.ico` (used by `packaging/icons.sh`).
+//! - `ios (--sim | --device) [--release] [--dry-run] [--bundle-id ID] …`: build the iPad bundle
+//!   (`packaging/ios`) and run it on the Simulator or a device (macOS + Xcode; see `ios --help`).
 //! - `ci`: fmt check, clippy -D warnings, tests, layers, assets, wasm.
 
 mod ico;
+mod ios;
 mod parity;
 mod version;
 
@@ -87,6 +90,7 @@ const LAYERS: &[(&str, u8)] = &[
     ("filmcraft", 6),
     ("cli", 6),
     ("web", 6),
+    ("ios", 6),
 ];
 
 /// L0 crates that are not codecs/containers (no `bitstream`-only restriction).
@@ -502,12 +506,16 @@ fn main() -> ExitCode {
             let rest: Vec<String> = std::env::args().skip(2).collect();
             parity::run(&root(), &rest.iter().map(String::as_str).collect::<Vec<_>>())
         }
+        "ios" => {
+            let rest: Vec<String> = std::env::args().skip(2).collect();
+            ios::run(&root(), &rest.iter().map(String::as_str).collect::<Vec<_>>())
+        }
         "ico" => {
             let rest: Vec<String> = std::env::args().skip(2).collect();
             ico::run(&rest.iter().map(String::as_str).collect::<Vec<_>>())
         }
         _ => Err(
-            "usage: cargo xtask <layers|assets|wasm|web [--dev] [--serve PORT]|fixtures [crate…]|parity [--area menus|effects|transitions] [--reference FILE] [--out FILE] [--min PERCENT]|ico OUT IN…|version [set X.Y.Z]|ci|bench [args]|bench-playback [args]>"
+            "usage: cargo xtask <layers|assets|wasm|ios (--sim|--device) […]|web [--dev] [--serve PORT]|fixtures [crate…]|parity [--area menus|effects|transitions] [--reference FILE] [--out FILE] [--min PERCENT]|ico OUT IN…|version [set X.Y.Z]|ci|bench [args]|bench-playback [args]>"
                 .into(),
         ),
     };
@@ -523,6 +531,11 @@ fn main() -> ExitCode {
 #[cfg(test)]
 mod tests {
     use std::path::Path;
+
+    #[test]
+    fn the_ios_runner_is_an_app_layer() {
+        assert_eq!(super::layer_of("filmcraft-ios"), Some(6));
+    }
 
     fn macos_packaging(file: &str) -> String {
         let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../packaging/macos").join(file);
