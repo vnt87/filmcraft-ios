@@ -1,0 +1,44 @@
+[package]
+name = "filmcraft-ios"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description = "FilmCraft native iPadOS app runner"
+
+[lib]
+name = "filmcraft_ios"
+crate-type = ["staticlib", "rlib"]
+
+# The workspace forbids `unsafe`, which no module can override, so this crate sets its own lints:
+# `unsafe` is denied crate-wide and allowed only in the Apple-only bridge modules (each unsafe block
+# carries a SAFETY comment); everything else stays safe Rust. The clippy lints are the workspace's.
+[lints.rust]
+unsafe_code = "deny"
+
+[lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+too_many_arguments = "allow"
+type_complexity = "allow"
+
+[dependencies]
+filmcraft-engine = { workspace = true }
+filmcraft-ui-egui = { workspace = true }
+serde_json = { workspace = true }
+eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit"] }
+egui = { workspace = true }
+log = { workspace = true }
+
+[target.'cfg(target_os = "ios")'.dependencies]
+# Audio output (CoreAudio); the same crate and version the desktop app plays through.
+cpal = "0.16"
+# Already pinned by eframe; the safe UIKit window configuration.
+winit = { version = "=0.30.13", default-features = false }
+
+objc2 = "=0.6.4"
+objc2-foundation = { version = "=0.3.2", default-features = false, features = ["std", "NSArray", "NSData", "NSError", "NSURL", "NSString", "NSObject", "NSDictionary", "NSFileManager", "NSPathUtilities", "NSFileCoordinator", "NSFilePresenter", "NSOperation", "NSSet", "NSValue", "block2"] }
+objc2-ui-kit = { version = "=0.3.2", default-features = false, features = ["std", "UIApplication", "UIWindow", "UIScene", "UISceneSession", "UISceneOptions", "UIWindowScene", "UIResponder", "UIViewController", "UIDocumentPickerViewController", "UIView", "UIEvent", "UITouch", "UIGestureRecognizer", "UIGestureRecognizerSubclass", "UIHoverGestureRecognizer", "block2", "objc2-core-foundation", "objc2-uniform-type-identifiers"] }
+objc2-uniform-type-identifiers = { version = "=0.3.2", default-features = false, features = ["std", "UTType"] }
+block2 = "=0.6.2"
+dispatch2 = { version = "=0.3.1", default-features = false, features = ["std"] }
