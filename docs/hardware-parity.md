@@ -1,6 +1,6 @@
 # Hardware parity
 
-> **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-10 · **Change:** major (new file: hardware decode / encode per platform and codec, GPU effects, devices; re-measured after NVDEC #549 and GPU export #421) · **Target:** Adobe Premiere Pro 2026 (26.5.2)
+> **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-14 · **Change:** minor (iPadOS fork section added; before that: major, new file: hardware decode / encode per platform and codec, GPU effects, devices; re-measured after NVDEC #549 and GPU export #421) · **Target:** Adobe Premiere Pro 2026 (26.5.2)
 
 Each hardware feature Premiere uses, per platform, against ours. Implementation detail lives in
 [`crates/platform/README.md`](../crates/platform/README.md) (decode / encode backends, the one
@@ -80,8 +80,18 @@ VideoToolbox Main 10 HDR encode; 10-bit / 4:2:2 decode off macOS; HDR display; e
 I/O and control surfaces (need hardware we don't own). Calibration: one decode backend ~3–5 h,
 one encoder ~4–8 h ([target-app-parity.md](target-app-parity.md#calibration)).
 
+## iPadOS (fork)
+
+Only what has been demonstrated. On the iPad Air 11-inch (M3) Simulator with iPadOS 26.2 (2026-10-14): the Debug
+app builds for Apple Silicon, installs, launches, shows the editor in landscape and lays out inside the safe area
+(UIKit bottom inset 20 pt, top inset 32 pt while the status bar shows, then 0). Not verified: a physical iPad,
+importing and playing media, audio output, saving, exporting, touch, Apple Pencil, Release builds. Hardware
+video decoding is not wired up on iPadOS (`crates/platform` implements VideoToolbox for macOS only), so decoding
+is in software; voice-over recording, folder access, the system clipboard and printing are not wired up.
+
 ## Revision history
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-10-14 | minor | iPadOS fork section: simulator launch and safe-area layout only; nothing else claimed |
 | 2026-10-10 | major | Created from ROADMAP.md's performance-and-hardware row and `crates/platform/README.md`; added Linux NVDEC (#549), GPU export and Lumetri on the GPU (#421), Premiere's per-platform hardware list, devices and I/O |

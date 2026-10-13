@@ -1,0 +1,8 @@
+asset:        docs/images/filmcraft-ipad-landscape.png
+title:        FilmCraft running on an iPad Air 11-inch in landscape (iPadOS simulator), empty project
+author:       FilmCraft contributors
+source:       screenshot of this fork's own app (FilmCraft's own interface, icons and fonts) in the iPad Simulator; no third-party media is shown
+license:      MIT OR Apache-2.0
+license-file: LICENSE-MIT
+added:        2026-10-14 by Claude (agent) for the iPadOS fork
+notes:        README hero image for the iPadOS fork. Resized to 1600 px wide.
